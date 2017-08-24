@@ -9,7 +9,7 @@ $user_avatar = 'img/user.jpg';
 date_default_timezone_set('Europe/Moscow');
 
 // записать в эту переменную оставшееся время в этом формате (ЧЧ:ММ)
-//$lot_time_remaining = "00:00";
+$lot_time_remaining = "00:00";
 
 // временная метка для полночи следующего дня
 $tomorrow = strtotime('tomorrow midnight');
@@ -23,7 +23,7 @@ function time_different($start, $end) {
   $date_diff = $end - $start;
   $hours = floor(($date_diff) / (60 * 60));
   $mins = floor(($date_diff - ($hours * 60 * 60)) / 60);
-  
+
   if ($mins < 10) {
     return $hours . ':0' . $mins;
   }
