@@ -19,18 +19,23 @@ $now = strtotime('now');
 
 // далее нужно вычислить оставшееся время до начала следующих суток и записать его в переменную $lot_time_remaining
 // ...
-function time_different($start, $end) {
+function time_different_calc($start, $end) {
   $date_diff = $end - $start;
   $hours = floor(($date_diff) / (60 * 60));
   $mins = floor(($date_diff - ($hours * 60 * 60)) / 60);
 
-  if ($mins < 10) {
-    return $hours . ':0' . $mins;
+  if ($hours < 10) {
+    $hours = '0' . $hours;
   }
+
+  if ($mins < 10) {
+    $mins = '0' . $mins;
+  }
+
   return $hours . ':' . $mins;
 }
 
-$lot_time_remaining = time_different($now, $tomorrow);
+$lot_time_remaining = time_different_calc($now, $tomorrow);
 
 ?>
 <!DOCTYPE html>
