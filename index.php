@@ -1,4 +1,5 @@
 <?php
+
 $is_auth = (bool) rand(0, 1);
 
 $user_name = 'Константин';
@@ -8,7 +9,7 @@ $user_avatar = 'img/user.jpg';
 date_default_timezone_set('Europe/Moscow');
 
 // записать в эту переменную оставшееся время в этом формате (ЧЧ:ММ)
-$lot_time_remaining = "00:00";
+//$lot_time_remaining = "00:00";
 
 // временная метка для полночи следующего дня
 $tomorrow = strtotime('tomorrow midnight');
@@ -18,6 +19,19 @@ $now = strtotime('now');
 
 // далее нужно вычислить оставшееся время до начала следующих суток и записать его в переменную $lot_time_remaining
 // ...
+function time_different($start, $end) {
+  $date_diff = $end - $start;
+  $hours = floor(($date_diff) / (60 * 60));
+  $mins = floor(($date_diff - ($hours * 60 * 60)) / 60);
+  
+  if ($mins < 10) {
+    return $hours . ':0' . $mins;
+  }
+  return $hours . ':' . $mins;
+}
+
+$lot_time_remaining = time_different($now, $tomorrow);
+
 ?>
 <!DOCTYPE html>
 <html lang="ru">
