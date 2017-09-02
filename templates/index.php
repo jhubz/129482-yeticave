@@ -32,8 +32,8 @@
         </select>
     </div>
     <ul class="lots__list">
-        <?php foreach ($lots as $lot): ?>
-            <?=render_template('templates/lot_item.php', ['lot' => $lot, 'lot_time_remaining' => $lot_time_remaining]);?>
+        <?php foreach ($lots as $index => $lot): ?>
+            <?=render_template('templates/lot_item.php', ['lot' => $lot, 'lot_time_remaining' => $lot_time_remaining, 'id' => $index]);?>
         <?php endforeach; ?>
     </ul>
 </section>
