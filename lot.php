@@ -2,12 +2,14 @@
   require_once 'data_lots.php';
 
   if (isset($_GET['id'])) {
-    if (!array_key_exists($_GET['id'], $lots)) {
+
+    $id = (int)$_GET['id'];
+
+    if (!array_key_exists($id, $lots)) {
       http_response_code(404);
       print("Такой страницы не существует (ошибка 404)");
     }
     else {
-      $id = $_GET['id'];
 
       // ставки пользователей, которыми надо заполнить таблицу
       $bets = [
