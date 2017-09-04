@@ -26,14 +26,14 @@
     <div class="lots__header">
         <h2>Открытые лоты</h2>
         <select class="lots__select">
-            <?php foreach ($data['categories'] as $category): ?>
+            <?php foreach ($categories as $category): ?>
                 <option><?=$category;?></option>
             <?php endforeach; ?>
         </select>
     </div>
     <ul class="lots__list">
-        <?php foreach ($data['lots'] as $lot): ?>
-            <?=render_template('templates/lot_item.php', ['lot' => $lot, 'lot_time_remaining' => $data['lot_time_remaining']]);?>
+        <?php foreach ($lots as $index => $lot): ?>
+            <?=render_template('templates/lot_item.php', ['lot' => $lot, 'lot_time_remaining' => $lot_time_remaining, 'id' => $index]);?>
         <?php endforeach; ?>
     </ul>
 </section>

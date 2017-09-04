@@ -2,7 +2,7 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title><?=$data['page_title'];?></title>
+    <title><?=$page_title;?></title>
     <link href="css/normalize.min.css" rel="stylesheet">
     <link href="css/style.css" rel="stylesheet">
 </head>
@@ -22,12 +22,12 @@
 
         <nav class="user-menu">
 
-          <?php if ($data['is_auth']): ?>
+          <?php if ($is_auth): ?>
             <div class="user-menu__image">
-              <img src="<?=$data['user_avatar'];?>" width="40" height="40" alt="Пользователь">
+              <img src="<?=$user_avatar;?>" width="40" height="40" alt="Пользователь">
             </div>
             <div class="user-menu__logged">
-              <p><?=$data['user_name'];?></p>
+              <p><?=$user_name;?></p>
             </div>
           <?php else: ?>
             <ul class="user-menu__list">
@@ -45,7 +45,7 @@
 </header>
 
 <main class="container">
-    <?=$data['page_content'];?>
+    <?=$page_content;?>
 </main>
 
 <footer class="main-footer">
