@@ -1,8 +1,4 @@
 <?php
-  
-?>
-
-<?php
   print(render_template('templates/nav.php', ['categories' => $categories]));
 ?>
 
@@ -41,7 +37,7 @@
                     <option value="<?=$category;?>" selected><?=$category;?></option>
                 <?php else: ?>
                     <option value="<?=$category;?>"><?=$category;?></option>
-                <?php endif; ?>   
+                <?php endif; ?>
             <?php endforeach; ?>
       </select>
       <span class="form__error">
@@ -68,18 +64,32 @@
       ?>
     </span>
   </div>
-  <div class="form__item form__item--file"> <!-- form__item--uploaded -->
+
+  <input type="hidden" id="photo-path" name="photo-path" value="<?=$file_url;?>">
+
+  <?php if ($file_url): ?>
+    <div class="form__item form__item--file form__item--uploaded">
+  <?php else: ?>
+    <div class="form__item form__item--file">
+  <?php endif; ?>
     <label>Изображение</label>
     <div class="preview">
       <button class="preview__remove" type="button">x</button>
       <div class="preview__img">
-        <img src="../img/avatar.jpg" width="113" height="113" alt="Изображение лота">
+        <img src="<?=$file_url;?>" width="113" height="113" alt="Изображение лота">
       </div>
     </div>
     <div class="form__input-file">
       <input class="visually-hidden" type="file" id="photo2" name="photo2" value="">
       <label for="photo2">
-        <span>+ Добавить</span>
+        <span>
+          + Добавить
+          <?php
+            if (in_array('photo2', $errors)) {
+              print($errors_messages['photo2']);
+            }
+          ?>
+        </span>
       </label>
     </div>
   </div>

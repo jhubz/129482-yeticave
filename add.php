@@ -51,16 +51,18 @@
           //break;
         }
 
-        // ПОЧЕМУ-ТО НЕ СРАБАТЫВАЕТ
-        if (in_array($key, $rules)) {
+        if (in_array($key, array_keys($rules))) {
           $result = call_user_func($rules[$key], $value);
 
           if (!$result) {
             $errors[] = $key;
 
             switch ($rules[$key]) {
+              case 'validate_category':
+                $errors_messages[$key] = 'Выберите категорию';
+                break;
               case 'validate_number':
-                $errors_messages[$key] = 'Введите число';
+                $errors_messages[$key] = 'Введите целое положительное число';
                 break;
               case 'validate_date':
                 $errors_messages[$key] = 'Формат даты: дд.мм.гггг. Нельзя указывать сегодняшнюю и прошедшие даты';
@@ -70,36 +72,38 @@
         }
       }
 
+
+      if (isset($_FILES['photo2'])) {
+        $file_name = $_FILES['photo2']['name'];
+        $file_tmp_name = $_FILES['photo2']['tmp_name'];
+        $file_type = $_FILES['photo2']['type'];
+        $file_path = __DIR__ . '/img/';
+
+
+        if ($file_type === 'image/jpeg') {
+          move_uploaded_file($file_tmp_name, $file_path . $file_name);
+          $new_file_url = '/img/' . $file_name;
+        }
+        elseif (empty($_FILES['photo2'])) {
+          $errors[] = 'photo2';
+          $errors_messages['photo2'] = 'Загрузите фото в jpg формате';
+        }
+      }
+
       $title = filter_text($_POST['lot-name']);
       $category = filter_text($_POST['category']);
       $message = filter_text($_POST['message']);
 
+      if ($new_file_url) {
+        $file_url = $new_file_url;
+      }
+      else {
+        $file_url = $_POST['photo-path'];
+      }
+
       $lot_rate = filter_text($_POST['lot-rate']);
       $lot_step = filter_text($_POST['lot-step']);
       $lot_date = filter_text($_POST['lot-date']);
-
-
-      // Делаю проверку здесь, потому что в foreach почему-то не срабатывает
-      if (!validate_category($category)) {
-        $errors[] = 'category';
-        $errors_messages['category'] = 'Выберите категорию';
-      }
-
-      if (!validate_number($lot_rate)) {
-        $errors[] = 'lot-rate';
-        $errors_messages['lot-rate'] = 'Введите целое положительное число';
-      }
-
-      if (!validate_number($lot_step)) {
-        $errors[] = 'lot-step';
-        $errors_messages['lot-step'] = 'Введите целое положительное число';
-      }
-
-      if (!validate_date($lot_date)) {
-        $errors[] = 'lot-date';
-        $errors_messages['lot-date'] = 'Формат даты: дд.мм.гггг. Нельзя указывать сегодняшнюю и прошедшие даты';
-      }
-      // Конец проверки
 
       if (empty($errors)) {
 
@@ -108,18 +112,18 @@
             'title' => $title,
             'category' => $category,
             'description' => $message,
-            'price' => intval($lot_rate),
-            'img' => 'img/lot-1.jpg'
+            'img' => $file_url,
+            'price' => intval($lot_rate)
           ]
         ];
-
 
         $page_content = render_template('templates/lot.php',
           [
             'categories' => $categories,
             'lots' => $added_lot,
             'id' => 0,
-            'bets' => $bets]);
+            'bets' => $bets
+          ]);
 
         $layout_content = render_template('templates/layout.php',
           [
@@ -147,6 +151,7 @@
             'lot_name' => $title,
             'selected_category' => $category,
             'message' => $message,
+            'file_url' => $file_url,
             'lot_rate' => $lot_rate,
             'lot_step' => $lot_step,
             'lot_date' => $lot_date,
@@ -166,22 +171,6 @@
 
         die();
       }
-
-      /*
-      if (isset($_FILES['photo2'])) {
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-
-        $file_name = $_FILES['photo2']['tmp_name'];
-        $file_size = $_FILES['photo2']['size'];
-        $file_path = __DIR__ . '/uploads/';
-
-        $file_type = finfo_file($finfo, $file_name);
-
-        if ($file_type !== 'image/jpeg') {
-
-        }
-      }
-      */
     }
 
     $page_content = render_template('templates/add.php',
