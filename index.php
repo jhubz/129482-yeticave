@@ -1,11 +1,6 @@
 <?php
   require_once "functions.php";
-  require_once "data_lots.php";
-
-  $is_auth = (bool) rand(0, 1);
-
-  $user_name = 'Константин';
-  $user_avatar = 'img/user.jpg';
+  require_once "data.php";
 
   // устанавливаем часовой пояс в Московское время
   date_default_timezone_set('Europe/Moscow');
@@ -18,7 +13,7 @@
 
   // временная метка для настоящего времени
   $now = strtotime('now');
-
+  
   // далее нужно вычислить оставшееся время до начала следующих суток и записать его в переменную $lot_time_remaining
   function time_different_calc($start, $end) {
     $date_diff = $end - $start;
@@ -36,11 +31,23 @@
     return $hours . ':' . $mins;
   }
 
+
   $lot_time_remaining = time_different_calc($now, $tomorrow);
 
 
-  $page_content = render_template('templates/index.php', ['categories' => $categories, 'lots' => $lots, 'lot_time_remaining' => $lot_time_remaining]);
+  $page_content = render_template('templates/index.php',
+    ['categories' => $categories,
+      'categories_classes' => $categories_classes,
+      'lots' => $lots,
+      'lot_time_remaining' => $lot_time_remaining]);
 
-  $layout_content = render_template('templates/layout.php', ['page_content' => $page_content, 'is_auth' => $is_auth, 'user_name' => $user_name, 'user_avatar' => $user_avatar, 'page_title' => 'Главная']);
+  $layout_content = render_template('templates/layout.php',
+    ['page_content' => $page_content,
+      'categories' => $categories,
+      'is_auth' => $is_auth,
+      'user_name' => $user_name,
+      'user_avatar' => $user_avatar,
+      'page_title' => 'Главная',
+      'is_index_page' => true]);
 
   print($layout_content);
