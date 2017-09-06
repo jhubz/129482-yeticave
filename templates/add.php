@@ -1,7 +1,3 @@
-<?php
-  print(render_template('templates/nav.php', ['categories' => $categories]));
-?>
-
 <?php if (!empty($errors)): ?>
   <form class="form form--invalid form--add-lot container" action="add.php" method="post" enctype="multipart/form-data"> <!-- form--invalid -->
 <?php else: ?>
