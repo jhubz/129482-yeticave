@@ -1,6 +1,12 @@
 <?php
+  session_start();
+  
   require_once "functions.php";
   require_once "data.php";
+  
+  if (isset($_SESSION['user'])) {
+    $user = $_SESSION['user'];
+  }
 
   // устанавливаем часовой пояс в Московское время
   date_default_timezone_set('Europe/Moscow');
@@ -36,18 +42,20 @@
 
 
   $page_content = render_template('templates/index.php',
-    ['categories' => $categories,
+    [
+      'categories' => $categories,
       'categories_classes' => $categories_classes,
       'lots' => $lots,
-      'lot_time_remaining' => $lot_time_remaining]);
+      'lot_time_remaining' => $lot_time_remaining
+    ]);
 
   $layout_content = render_template('templates/layout.php',
-    ['page_content' => $page_content,
+    [
+      'page_content' => $page_content,
       'categories' => $categories,
-      'is_auth' => $is_auth,
-      'user_name' => $user_name,
-      'user_avatar' => $user_avatar,
+      'user' => $user,
       'page_title' => 'Главная',
-      'is_index_page' => true]);
+      'is_index_page' => true
+    ]);
 
   print($layout_content);
