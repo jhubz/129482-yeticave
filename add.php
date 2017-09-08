@@ -27,13 +27,6 @@
     return $value !== 'Выберите категорию';
   }
 
-  function validate_number($value) {
-    if ((filter_var($value, FILTER_VALIDATE_INT) === false) || ((int)$value < 0)) {
-        return false;
-    }
-    return true;
-  }
-
   function validate_date($value) {
 
     $now_ts = strtotime('now');

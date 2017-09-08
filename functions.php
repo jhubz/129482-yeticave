@@ -19,6 +19,7 @@
     $time_diff = $now - $ts;
     $ts_day = 60 * 60 * 24;
     $ts_hour = 60 * 60;
+    $ts_minute = 60;
 
     if ($time_diff > $ts_day) {
       return date("d.m.y в H:i", $ts);
@@ -27,13 +28,25 @@
     if ($time_diff >= $ts_hour) {
       return gmdate("G часов назад", $time_diff);
     }
-
-    return ltrim(gmdate("i минут назад", $time_diff), 0);
+    
+    if ($time_diff >= $ts_minute) {
+      return ltrim(gmdate("i минут назад", $time_diff), 0);
+    }
+    
+    return "Менее минуты назад";
   }
   
   // функция фильтрации строки текста
   function filter_text($value) {
     return trim(htmlspecialchars($value));
+  }
+  
+  // функция проверки на число
+  function validate_number($value) {
+    if ((filter_var($value, FILTER_VALIDATE_INT) === false) || ((int)$value < 0)) {
+        return false;
+    }
+    return true;
   }
   
   // создание отпечатка пользователя
