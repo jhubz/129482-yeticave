@@ -165,14 +165,13 @@ SELECT
 	lots.title,
 	lots.start_price,
 	lots.img_path,
-	MAX(bets.price) as bet_price,
+	IFNULL(MAX(bets.price), lots.start_price) as bet_price,
 	COUNT(bets.lot_id) as bets_count,
-	categories.name,
-	lots.complete_date
+	categories.name
 FROM lots
 JOIN categories
 	ON categories.id = lots.category_id
-JOIN bets
+LEFT JOIN bets
 	ON bets.lot_id = lots.id
 WHERE lots.complete_date > NOW()
 GROUP BY lots.id
