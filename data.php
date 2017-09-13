@@ -18,7 +18,7 @@
     [
       'title' => 'DC Ply Mens 2016/2017 Snowboard',
       'category' => $categories[0],
-      'price' => 159999,
+      'price' => 15999,
       'img' => 'img/lot-2.jpg'
     ],
     [
