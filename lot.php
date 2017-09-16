@@ -1,9 +1,9 @@
 <?php
   session_start();
-  
-  require_once "functions.php";
+
+  require_once "init.php";
   require_once 'data.php';
-  
+
   if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
   }
@@ -17,29 +17,29 @@
       print("Такой страницы не существует (ошибка 404)");
     }
     else {
-      
+
       $errors = [];
       $errors_messages = [];
       $is_done_bet = false;
-      
+
       if (isset($_COOKIE['bets_data'])) {
         $bets_data = json_decode($_COOKIE['bets_data'], true);
-        
+
         foreach ($bets_data as $bet_data) {
           if ($bet_data['id'] === $id) {
             $is_done_bet = true;
           }
         }
       }
-      
+
       if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-        
+
         $required = ['cost'];
 
         $rules = [
           'cost' => 'validate_number'
         ];
-        
+
         foreach ($_POST as $key => $value) {
           if (in_array($key, $required) && $value === '') {
             $errors[] = $key;
@@ -61,11 +61,11 @@
             }
           }
         }
-        
+
         $cost = filter_text($_POST['cost']);
-        
+
         if (empty($errors)) {
-          
+
           $cost = intval($cost);
           $bets_data[] = ['id' => $id, 'date' => strtotime('now'), 'cost' => $cost];
           $expire_date = strtotime('Mon, 25-Jan-2027 10:00:00 GMT');
@@ -101,7 +101,7 @@
           die();
         }
       }
-            
+
       $page_content = render_template('templates/lot.php',
         [
           'categories' => $categories,

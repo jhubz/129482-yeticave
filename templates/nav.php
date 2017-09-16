@@ -1,9 +1,11 @@
-<nav class="nav">
-    <ul class="nav__list container">
-        <?php foreach ($categories as $category): ?>
-            <li class="nav__item">
-                <a href="all-lots.html"><?=$category;?></a>
-            </li>
-        <?php endforeach; ?>
-    </ul>
-</nav>
+<?php if ($categories): ?>
+  <nav class="nav">
+      <ul class="nav__list container">
+          <?php foreach ($categories as $category): ?>
+              <li class="nav__item">
+                  <a href="all-lots.html"><?=$category;?></a>
+              </li>
+          <?php endforeach; ?>
+      </ul>
+  </nav>
+<? endif; ?>

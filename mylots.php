@@ -1,20 +1,20 @@
 <?php
   session_start();
-  
-  require_once "functions.php";
+
+  require_once "init.php";
   require_once "data.php";
-  
+
   if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
   }
-  
+
   if (isset($_COOKIE['bets_data'])) {
     $bets_data = json_decode($_COOKIE['bets_data'], true);
   }
   else {
     $bets_data = [];
   }
-  
+
   $page_content = render_template('templates/mylots.php',
     [
       'categories' => $categories,

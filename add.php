@@ -1,15 +1,15 @@
 <?php
   session_start();
-  
-  require_once "functions.php";
+
+  require_once "init.php";
   require_once "data.php";
-  
+
   if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
   }
   else {
     http_response_code(403);
-    
+
     $layout_content = render_template('templates/layout.php',
       [
         'page_content' => 'Неавторизованный пользователь (ошибка 403)',
@@ -19,7 +19,7 @@
       ]);
 
     print($layout_content);
-    
+
     die();
   }
 
@@ -195,4 +195,3 @@
     ]);
 
   print($layout_content);
-
