@@ -1,9 +1,9 @@
 <?php
   session_start();
-  
-  require_once "functions.php";
+
+  require_once "init.php";
   require_once "data.php";
-  
+
   if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
   }
@@ -19,7 +19,7 @@
 
   // временная метка для настоящего времени
   $now = strtotime('now');
-  
+
   // далее нужно вычислить оставшееся время до начала следующих суток и записать его в переменную $lot_time_remaining
   function time_different_calc($start, $end) {
     $date_diff = $end - $start;

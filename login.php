@@ -1,16 +1,16 @@
 <?php
   session_start();
   
-  require_once "functions.php";
+  require_once "init.php";
   require_once "data.php";
   require_once "userdata.php";
-  
+
   if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
   }
-  
+
   $required = ['email', 'password'];
-  
+
   $errors = [];
 
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
@@ -19,12 +19,12 @@
         $errors[] = $key;
       }
     }
-    
+
     $email = $_POST['email'];
     $password = $_POST['password'];
-    
+
     if (!count($errors)) {
-      
+
       if ($user = search_user_by_email($email, $users)) {
         if (password_verify($password, $user['password'])) {
           $_SESSION['user'] = $user;
@@ -33,7 +33,7 @@
         else {
           $errors[] = 'password';
           $invalid_password_message = "Вы ввели неверный пароль";
-          
+
           $page_content = render_template('templates/login.php',
             [
               'categories' => $categories,
@@ -51,14 +51,14 @@
             ]);
 
           print($layout_content);
-          
+
           die();
         }
       }
       else {
         $errors[] = 'email';
         $invalid_email_message = "Такого пользователя нет";
-        
+
         $page_content = render_template('templates/login.php',
           [
             'categories' => $categories,
@@ -76,7 +76,7 @@
           ]);
 
         print($layout_content);
-        
+
         die();
       }
     }
@@ -97,11 +97,11 @@
         ]);
 
       print($layout_content);
-      
+
       die();
     }
   }
-    
+
   $page_content = render_template('templates/login.php',
     [
       'categories' => $categories,
