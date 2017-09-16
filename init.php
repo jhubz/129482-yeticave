@@ -1,9 +1,11 @@
 <?php
+  require_once "mysql_helper.php";
   require_once "functions.php";
 
   $connect = mysqli_connect("localhost", "root", "", "yeticave");
 
   if(!$connect) {
+
     $page_content = render_template('templates/error.php',
       [
         'error_message' => mysqli_connect_error()
