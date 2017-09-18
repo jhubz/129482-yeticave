@@ -2,7 +2,6 @@
   session_start();
 
   require_once "init.php";
-  require_once "data.php";
 
   if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];

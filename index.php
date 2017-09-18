@@ -2,7 +2,6 @@
   session_start();
 
   require_once "init.php";
-  require_once "data.php";
 
   if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
@@ -11,42 +10,35 @@
   // устанавливаем часовой пояс в Московское время
   date_default_timezone_set('Europe/Moscow');
 
-  // записать в эту переменную оставшееся время в этом формате (ЧЧ:ММ)
-  $lot_time_remaining = "00:00";
+  $categories_classes = ['boards', 'attachment', 'boots', 'clothing', 'tools', 'other'];
 
-  // временная метка для полночи следующего дня
-  $tomorrow = strtotime('tomorrow midnight');
+  $lots_query =
+    'SELECT
+      lots.id as lot_id,
+    	lots.title as title,
+    	lots.start_price as start_price,
+    	lots.img_path as img,
+    	IFNULL(MAX(bets.price), lots.start_price) as lot_price,
+    	COUNT(bets.lot_id) as bets_count,
+    	categories.name as category,
+      lots.complete_date as complete_date
+    FROM lots
+    JOIN categories
+    	ON categories.id = lots.category_id
+    LEFT JOIN bets
+    	ON bets.lot_id = lots.id
+    WHERE lots.complete_date > NOW()
+    GROUP BY lots.id
+    ORDER BY
+    	lots.complete_date DESC';
 
-  // временная метка для настоящего времени
-  $now = strtotime('now');
-
-  // далее нужно вычислить оставшееся время до начала следующих суток и записать его в переменную $lot_time_remaining
-  function time_different_calc($start, $end) {
-    $date_diff = $end - $start;
-    $hours = floor(($date_diff) / (60 * 60));
-    $mins = floor(($date_diff - ($hours * 60 * 60)) / 60);
-
-    if ($hours < 10) {
-      $hours = '0' . $hours;
-    }
-
-    if ($mins < 10) {
-      $mins = '0' . $mins;
-    }
-
-    return $hours . ':' . $mins;
-  }
-
-
-  $lot_time_remaining = time_different_calc($now, $tomorrow);
-
+  $lots = select_data($connect, $lots_query);
 
   $page_content = render_template('templates/index.php',
     [
       'categories' => $categories,
       'categories_classes' => $categories_classes,
-      'lots' => $lots,
-      'lot_time_remaining' => $lot_time_remaining
+      'lots' => $lots
     ]);
 
   $layout_content = render_template('templates/layout.php',

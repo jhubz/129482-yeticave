@@ -23,3 +23,10 @@
 
     die();
   }
+  else {
+
+    $select_categories_result = select_data($connect, 'SELECT name FROM categories');
+    foreach ($select_categories_result as $value) {
+      $categories[] .= $value['name'];
+    }
+  }

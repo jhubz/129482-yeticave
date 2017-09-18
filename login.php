@@ -1,13 +1,7 @@
 <?php
   session_start();
-  
-  require_once "init.php";
-  require_once "data.php";
-  require_once "userdata.php";
 
-  if (isset($_SESSION['user'])) {
-    $user = $_SESSION['user'];
-  }
+  require_once "init.php";
 
   $required = ['email', 'password'];
 
@@ -20,12 +14,24 @@
       }
     }
 
-    $email = $_POST['email'];
-    $password = $_POST['password'];
+    $email = $_POST['email'] ?? '';
+    $password = $_POST['password'] ?? '';
 
     if (!count($errors)) {
 
-      if ($user = search_user_by_email($email, $users)) {
+      $select_user =
+        'SELECT *
+        FROM users
+        WHERE email = ?
+      ';
+
+      $users = select_data($connect, $select_user, [$email]);
+
+      if ($users) {
+        foreach ($users as $value) {
+          $user = $value;
+        }
+
         if (password_verify($password, $user['password'])) {
           $_SESSION['user'] = $user;
           header("Location: /index.php");
@@ -36,7 +42,6 @@
 
           $page_content = render_template('templates/login.php',
             [
-              'categories' => $categories,
               'errors' => $errors,
               'invalid_password_message' => $invalid_password_message,
               'email' => $email
@@ -61,7 +66,6 @@
 
         $page_content = render_template('templates/login.php',
           [
-            'categories' => $categories,
             'errors' => $errors,
             'invalid_email_message' => $invalid_email_message,
             'email' => $email
@@ -83,7 +87,6 @@
     else {
       $page_content = render_template('templates/login.php',
         [
-          'categories' => $categories,
           'errors' => $errors,
           'email' => $email
         ]);
@@ -104,7 +107,6 @@
 
   $page_content = render_template('templates/login.php',
     [
-      'categories' => $categories,
       'errors' => $errors
     ]);
 
