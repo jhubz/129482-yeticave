@@ -24,6 +24,7 @@
         FROM users
         WHERE email = ?
       ';
+      //////////////////////////////////
 
       $users = select_data($connect, $select_user, [$email]);
 
@@ -51,7 +52,6 @@
             [
               'page_content' => $page_content,
               'categories' => $categories,
-              'user' => $user,
               'page_title' => 'Вход'
             ]);
 
@@ -75,7 +75,6 @@
           [
             'page_content' => $page_content,
             'categories' => $categories,
-            'user' => $user,
             'page_title' => 'Вход'
           ]);
 
@@ -95,7 +94,6 @@
         [
           'page_content' => $page_content,
           'categories' => $categories,
-          'user' => $user,
           'page_title' => 'Вход'
         ]);
 
@@ -107,15 +105,17 @@
 
   $page_content = render_template('templates/login.php',
     [
-      'errors' => $errors
+      'errors' => $errors,
+      'message' => $_SESSION['signup_message']
     ]);
 
   $layout_content = render_template('templates/layout.php',
     [
       'page_content' => $page_content,
       'categories' => $categories,
-      'user' => $user,
       'page_title' => 'Вход'
     ]);
 
   print($layout_content);
+
+  unset($_SESSION['signup_message']);

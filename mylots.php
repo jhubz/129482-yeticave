@@ -7,18 +7,29 @@
     $user = $_SESSION['user'];
   }
 
-  if (isset($_COOKIE['bets_data'])) {
-    $bets_data = json_decode($_COOKIE['bets_data'], true);
-  }
-  else {
-    $bets_data = [];
-  }
+  $mylots_query =
+    'SELECT
+      lots.img_path as img,
+      lots.id as lot_id,
+      lots.title as title,
+      categories.name as category,
+      lots.complete_date as lot_complete_date,
+      bets.price as bet_price,
+      bets.placement_date as bet_date
+    FROM bets
+    JOIN lots
+      ON lots.id = bets.lot_id
+    JOIN categories
+      ON categories.id = lots.category_id
+    WHERE bets.user_id = ?
+    ORDER BY bets.placement_date DESC
+  ';
+
+  $bets = select_data($connect, $mylots_query, [$user['id']]);
 
   $page_content = render_template('templates/mylots.php',
     [
-      'categories' => $categories,
-      'lots' => $lots,
-      'bets_data' => $bets_data
+      'bets' => $bets
     ]);
 
   $layout_content = render_template('templates/layout.php',

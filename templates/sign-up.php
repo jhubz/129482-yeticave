@@ -1,7 +1,7 @@
 <?php if (!empty($errors)): ?>
-  <form class="form form--invalid container" action="sign-up.php" method="post">
+  <form class="form form--invalid container" action="sign-up.php" method="post" enctype="multipart/form-data">
 <?php else: ?>
-  <form class="form container" action="sign-up.php" method="post">
+  <form class="form container" action="sign-up.php" method="post" enctype="multipart/form-data">
 <?php endif; ?>
 
   <h2>Регистрация нового аккаунта</h2>

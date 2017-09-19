@@ -53,6 +53,7 @@
   $errors_messages = [];
 
   if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
     foreach ($_POST as $key => $value) {
       if (in_array($key, $required) && $value === '') {
         $errors[] = $key;
@@ -84,14 +85,18 @@
       $file = $_FILES['photo2'];
 
       if (!empty($file['name'])) {
-        if (validate_jpeg_file($file)) {
+        if (validate_image_file($file)) {
           $new_file_url = move_uploaded_file_to_dir($file, '/img/');
-          $_SESSION['photo-path'] = $new_file_url;
+          $_SESSION['photo-add-path'] = $new_file_url;
         }
         else {
           $errors[] = 'photo2';
-          $errors_messages['photo2'] = 'Загрузите фото в jpg формате';
+          $errors_messages['photo2'] = 'Загрузите фото';
         }
+      }
+      else {
+        $errors[] = 'photo2';
+        $errors_messages['photo2'] = 'Загрузите фото';
       }
     }
 
@@ -99,7 +104,7 @@
     $category = $_POST['category'] ?? '';
     $message = $_POST['message'] ?? '';
 
-    $file_url = $_SESSION['photo-path'] ?? '';
+    $file_url = $_SESSION['photo-add-path'] ?? '';
 
     $lot_rate = $_POST['lot-rate'] ?? '';
     $lot_step = $_POST['lot-step'] ?? '';
@@ -133,18 +138,14 @@
       );
 
       if ($inserted_lot_id) {
+        unset($_SESSION['photo-add-path']);
 
         header("Location: /lot.php?id=$inserted_lot_id");
-
-        unset($_SESSION['photo-path']);
-
-        die();
       }
       else {
         echo 'Вставка в таблицу не удалась!';
         die();
       }
-
 
     }
     else {
@@ -178,7 +179,7 @@
     }
   }
 
-  unset($_SESSION['photo-path']);
+  unset($_SESSION['photo-add-path']);
 
   $page_content = render_template('templates/add.php',
     [

@@ -78,8 +78,16 @@
   }
 
   // проверка на файл изображение
-  function validate_jpeg_file($file) {
-    return $file['type'] === 'image/jpeg';
+  function validate_image_file($file) {
+    $image_types = ['image/png', 'image/jpeg'];
+    $file_type = mime_content_type($file['tmp_name']);
+
+    foreach ($image_types as $image_type) {
+      if ($file_type === $image_type) {
+        return true;
+      }
+    }
+    return false;
   }
 
   // перемещение файла в указанную папку и получение его пути
@@ -87,7 +95,7 @@
     $file_name = $file['name'];
     $file_tmp_name = $file['tmp_name'];
     $file_type = $file['type'];
-    $file_path = __DIR__ . $path;           // '/img/'
+    $file_path = __DIR__ . $path;
 
     move_uploaded_file($file_tmp_name, $file_path . $file_name);
     $new_file_url = $path . $file_name;

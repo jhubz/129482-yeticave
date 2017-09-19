@@ -107,11 +107,11 @@
           $errors_messages[$key] = 'Слишком низкая ставка';
         }
 
-        $cost = filter_text($_POST['cost']);
+        $cost = $_POST['cost'] ?? '';
 
         if (empty($errors)) {
 
-          $cost = intval($cost);
+          // $cost = intval($cost);
           // $bets_data[] = ['id' => $id, 'date' => strtotime('now'), 'cost' => $cost];
           // $expire_date = strtotime('Mon, 25-Jan-2027 10:00:00 GMT');
           //
@@ -124,6 +124,18 @@
           // ВСТАВКА СТАВКИ В ТАБЛИЦУ
           //
 
+          $inserted_bet_id = insert_data($connect, 'bets',
+            [
+              'user_id' => $user['id'],
+              'lot_id' => $lot['lot_id'],
+              'placement_date' => date('Y-m-d H:i:s'),
+              'price' => $cost
+            ]
+          );
+
+          if ($inserted_bet_id) {
+            header("Location: /mylots.php");
+          }
 
         }
         else {
