@@ -28,7 +28,7 @@
 
           <?php if ($user): ?>
             <div class="user-menu__image">
-              <img src="<?=$user['avatar'];?>" width="40" height="40" alt="Пользователь">
+              <img src="<?=$user['avatar_path'];?>" width="40" height="40" alt="Пользователь">
             </div>
             <div class="user-menu__logged">
               <p><?=$user['name'];?></p>
@@ -37,7 +37,7 @@
           <?php else: ?>
             <ul class="user-menu__list">
               <li class="user-menu__item">
-                <a href="#">Регистрация</a>
+                <a href="sign-up.php">Регистрация</a>
               </li>
               <li class="user-menu__item">
                 <a href="login.php">Вход</a>
@@ -60,10 +60,10 @@
 
 <footer class="main-footer">
 
-    <?php 
+    <?php
       print(render_template('templates/nav.php', ['categories' => $categories]));
     ?>
-    
+
     <div class="main-footer__bottom container">
         <div class="main-footer__copyright">
             <p>© 2017, YetiCave</p>

@@ -36,6 +36,28 @@
     return "Менее минуты назад";
   }
 
+  // функция вычисления разницы времени между двумя датами в формате чч:мм:сс
+  function time_different_calc($start, $end) {
+    $date_diff = $end - $start;
+    $hours = floor(($date_diff) / (60 * 60));
+    $mins = floor(($date_diff - ($hours * 60 * 60)) / 60);
+    $seconds = floor(($date_diff - ($hours * 60 * 60) - ($mins * 60)));
+
+    if ($hours < 10) {
+      $hours = '0' . $hours;
+    }
+
+    if ($mins < 10) {
+      $mins = '0' . $mins;
+    }
+
+    if ($seconds < 10) {
+      $seconds = '0' . $seconds;
+    }
+
+    return $hours . ':' . $mins . ':' . $seconds;
+  }
+
   // функция фильтрации строки текста
   function filter_text($value) {
     return trim(htmlspecialchars($value));
@@ -46,7 +68,39 @@
     if ((filter_var($value, FILTER_VALIDATE_INT) === false) || ((int)$value < 0)) {
         return false;
     }
+
     return true;
+  }
+
+  // валидация email
+  function validate_email($value) {
+    return filter_var($value, FILTER_VALIDATE_EMAIL);
+  }
+
+  // проверка на файл изображение
+  function validate_image_file($file) {
+    $image_types = ['image/png', 'image/jpeg'];
+    $file_type = mime_content_type($file['tmp_name']);
+
+    foreach ($image_types as $image_type) {
+      if ($file_type === $image_type) {
+        return true;
+      }
+    }
+    return false;
+  }
+
+  // перемещение файла в указанную папку и получение его пути
+  function move_uploaded_file_to_dir($file, $path) {
+    $file_name = $file['name'];
+    $file_tmp_name = $file['tmp_name'];
+    $file_type = $file['type'];
+    $file_path = __DIR__ . $path;
+
+    move_uploaded_file($file_tmp_name, $file_path . $file_name);
+    $new_file_url = $path . $file_name;
+
+    return $new_file_url;
   }
 
   // создание отпечатка пользователя
@@ -87,6 +141,7 @@
   // функция выполнения запроса SELECT
   function select_data($connect, $query, $data = []) {
     $rows = [];
+
     $prepared_query = db_get_prepare_stmt($connect, $query, $data);
 
     if ($prepared_query) {
@@ -96,7 +151,7 @@
         $result = mysqli_stmt_get_result($prepared_query);
 
         if ($result) {
-          $rows = mysqli_fetch_all($result);
+          $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
         }
       }
     }
@@ -124,9 +179,11 @@
     $prepared_query = db_get_prepare_stmt($connect, $query, $values);
 
     if ($prepared_query) {
+
       $is_execute = mysqli_stmt_execute($prepared_query);
 
       if ($is_execute) {
+
         $last_id = mysqli_stmt_insert_id($prepared_query);
 
         return $last_id;

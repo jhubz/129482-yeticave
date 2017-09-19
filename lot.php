@@ -2,7 +2,6 @@
   session_start();
 
   require_once "init.php";
-  require_once 'data.php';
 
   if (isset($_SESSION['user'])) {
     $user = $_SESSION['user'];
@@ -10,11 +9,57 @@
 
   if (isset($_GET['id'])) {
 
-    $id = (int)$_GET['id'];
+    $lot_query =
+      'SELECT
+        lots.id as lot_id,
+        users.id as author_id,
+        lots.title as title,
+        lots.img_path as img,
+        categories.name as category,
+        lots.description as description,
+        IFNULL(MAX(bets.price), lots.start_price) as lot_price,
+        lots.bet_step as bet_step,
+        lots.complete_date as complete_date
+      FROM lots
+      JOIN users
+        ON users.id = lots.author_id
+      JOIN categories
+        ON categories.id = lots.category_id
+      LEFT JOIN bets
+        ON bets.lot_id = lots.id
+      WHERE
+        lots.id = ?
+      GROUP BY lots.id
+    ';
 
-    if (!array_key_exists($id, $lots)) {
+    $bets_query =
+      'SELECT
+        users.name as user_name,
+        users.id as user_id,
+        bets.price as bet_price,
+        bets.placement_date as bet_date
+      FROM bets
+      JOIN users
+        ON users.id = bets.user_id
+      WHERE
+        bets.lot_id = ?
+      ORDER BY
+        bets.placement_date DESC
+    ';
+
+    $lots = select_data($connect, $lot_query, [(int)$_GET['id']]);
+    foreach ($lots as $value) {
+      $lot = $value;
+    }
+
+    $bets = select_data($connect, $bets_query, [(int)$_GET['id']]);
+    $bets_count = count($bets);
+
+    if (!$lot) {
       http_response_code(404);
       print("Такой страницы не существует (ошибка 404)");
+
+      die();
     }
     else {
 
@@ -22,13 +67,9 @@
       $errors_messages = [];
       $is_done_bet = false;
 
-      if (isset($_COOKIE['bets_data'])) {
-        $bets_data = json_decode($_COOKIE['bets_data'], true);
-
-        foreach ($bets_data as $bet_data) {
-          if ($bet_data['id'] === $id) {
-            $is_done_bet = true;
-          }
+      foreach ($bets as $bet) {
+        if ($bet['user_id'] === $user['id']) {
+          $is_done_bet = true;
         }
       }
 
@@ -44,7 +85,6 @@
           if (in_array($key, $required) && $value === '') {
             $errors[] = $key;
             $errors_messages[$key] = 'Обязательное поле';
-            break;
           }
 
           if (in_array($key, array_keys($rules))) {
@@ -62,17 +102,40 @@
           }
         }
 
-        $cost = filter_text($_POST['cost']);
+        if ( !(in_array('cost', $errors)) && $value < ($lot['lot_price'] + $lot['bet_step']) ) {
+          $errors[] = $key;
+          $errors_messages[$key] = 'Слишком низкая ставка';
+        }
+
+        $cost = $_POST['cost'] ?? '';
 
         if (empty($errors)) {
 
-          $cost = intval($cost);
-          $bets_data[] = ['id' => $id, 'date' => strtotime('now'), 'cost' => $cost];
-          $expire_date = strtotime('Mon, 25-Jan-2027 10:00:00 GMT');
+          // $cost = intval($cost);
+          // $bets_data[] = ['id' => $id, 'date' => strtotime('now'), 'cost' => $cost];
+          // $expire_date = strtotime('Mon, 25-Jan-2027 10:00:00 GMT');
+          //
+          // setcookie('bets_data', json_encode($bets_data), $expire_date, '/');
+          //
+          // header("Location: /mylots.php");
 
-          setcookie('bets_data', json_encode($bets_data), $expire_date, '/');
 
-          header("Location: /mylots.php");
+          //
+          // ВСТАВКА СТАВКИ В ТАБЛИЦУ
+          //
+
+          $inserted_bet_id = insert_data($connect, 'bets',
+            [
+              'user_id' => $user['id'],
+              'lot_id' => $lot['lot_id'],
+              'placement_date' => date('Y-m-d H:i:s'),
+              'price' => $cost
+            ]
+          );
+
+          if ($inserted_bet_id) {
+            header("Location: /mylots.php");
+          }
 
         }
         else {
@@ -80,9 +143,9 @@
             [
               'categories' => $categories,
               'user' => $user,
-              'lots' => $lots,
-              'id' => $id,
+              'lot' => $lot,
               'bets' => $bets,
+              'bets_count' => $bets_count,
               'errors' => $errors,
               'errors_messages' => $errors_messages,
               'cost' => $cost
@@ -93,7 +156,7 @@
               'page_content' => $page_content,
               'user' => $user,
               'categories' => $categories,
-              'page_title' => $lots[$id]['title']
+              'page_title' => $lot['title']
             ]);
 
           print($layout_content);
@@ -106,9 +169,9 @@
         [
           'categories' => $categories,
           'user' => $user,
-          'lots' => $lots,
-          'id' => $id,
+          'lot' => $lot,
           'bets' => $bets,
+          'bets_count' => $bets_count,
           'errors' => $errors,
           'errors_messages' => $errors_messages,
           'is_done_bet' => $is_done_bet
@@ -119,7 +182,7 @@
           'page_content' => $page_content,
           'user' => $user,
           'categories' => $categories,
-          'page_title' => $lots[$id]['title']
+          'page_title' => $lot['title']
         ]);
 
       print($layout_content);

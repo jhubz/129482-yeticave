@@ -61,8 +61,6 @@
     </span>
   </div>
 
-  <input type="hidden" id="photo-path" name="photo-path" value="<?=$file_url;?>">
-
   <?php if ($file_url): ?>
     <div class="form__item form__item--file form__item--uploaded">
   <?php else: ?>

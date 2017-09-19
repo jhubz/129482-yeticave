@@ -1,25 +1,27 @@
 <section class="rates container">
   <h2>Мои ставки</h2>
   <table class="rates__list">
-    <?php foreach ($bets_data as $bet_data): ?>
+    <?php foreach ($bets as $bet): ?>
       <tr class="rates__item">
         <td class="rates__info">
           <div class="rates__img">
-            <img src="<?=$lots[$bet_data['id']]['img']?>" width="54" height="40" alt="Сноуборд">
+            <img src="<?=$bet['img']?>" width="54" height="40" alt="Сноуборд">
           </div>
-          <h3 class="rates__title"><a href="lot.php?id=<?=$bet_data['id'];?>"><?=$lots[$bet_data['id']]['title']?></a></h3>
+          <h3 class="rates__title"><a href="lot.php?id=<?=$bet['lot_id'];?>"><?=$bet['title']?></a></h3>
         </td>
         <td class="rates__category">
-          <?=$lots[$bet_data['id']]['category']?>
+          <?=$bet['category']?>
         </td>
         <td class="rates__timer">
-          <div class="timer timer--finishing">07:13:34</div>
+          <div class="timer timer--finishing">
+            <?=time_different_calc(strtotime('now'), strtotime($bet['lot_complete_date']));?>
+          </div>
         </td>
         <td class="rates__price">
-          <?=$bet_data['cost']?>
+          <?=$bet['bet_price']?>
         </td>
         <td class="rates__time">
-          <?=time_format($bet_data['date'])?>
+          <?=time_format(strtotime($bet["bet_date"]))?>
         </td>
       </tr>
     <?php endforeach; ?>

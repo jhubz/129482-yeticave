@@ -1,8 +1,13 @@
+
+
 <?php if (!empty($errors)): ?>
   <form class="form container form--invalid" action="login.php" method="post">
 <?php else: ?>
   <form class="form container" action="login.php" method="post">
 <?php endif; ?>
+  <?php if (!empty($message)): ?>
+    <p><?=$message;?></p>
+  <?php endif; ?>
   <h2>Вход</h2>
   <?php if (in_array('email', $errors)): ?>
     <div class="form__item form__item--invalid">
