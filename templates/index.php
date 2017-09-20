@@ -4,7 +4,7 @@
     <ul class="promo__list">
         <?php foreach ($categories as $index => $category): ?>
             <li class="promo__item promo__item--<?=$categories_classes[$index]?>">
-                <a class="promo__link" href="all-lots.html"><?=$category;?></a>
+                <a class="promo__link" href="all-lots.php?category_id=<?=$categories_id[$index];?>&page=1"><?=$category;?></a>
             </li>
         <?php endforeach; ?>
     </ul>
@@ -21,7 +21,16 @@
     </div>
     <ul class="lots__list">
         <?php foreach ($lots as $index => $lot): ?>
-            <?=render_template('templates/lot_item.php', ['lot' => $lot, 'lot_time_remaining' => $lot_time_remaining, 'id' => $index]);?>
+            <?=render_template('templates/lot_item.php', ['lot' => $lot]);?>
         <?php endforeach; ?>
     </ul>
+
+    <?=render_template('templates/paginator.php',
+        [
+            'page_link' => 'index.php?',
+            'pages_count' => $pages_count,
+            'page_number' => $page_number
+        ]
+    );?>
+
 </section>

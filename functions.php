@@ -1,209 +1,208 @@
 <?php
-  // функция генерации шаблона
-  function render_template($path, $data) {
-    if (!file_exists($path)) {
-      return '';
+
+    /**
+     * Генерирует шаблон страницы
+     *
+     * @param $path string Путь до шаблона
+     * @param array $data Данные для вставки передачи в шаблон
+     *
+     * @return ????????????????????????????
+     */
+    function render_template($path, $data)
+    {
+        if (!file_exists($path)) {
+            return '';
+        }
+
+        extract($data);
+
+        ob_start();
+        require $path;
+
+        return ob_get_clean();
     }
 
-    extract($data);
+    // функция, преобразующая временную метку в "человеческий" вид
+    function time_format($ts)
+    {
+        $now = strtotime('now');
+        $time_diff = $now - $ts;
+        $ts_day = 60 * 60 * 24;
+        $ts_hour = 60 * 60;
+        $ts_minute = 60;
 
-    ob_start();
-    require $path;
+        if ($time_diff > $ts_day) {
+            return date("d.m.y в H:i", $ts);
+        }
 
-    return ob_get_clean();
-  }
+        if ($time_diff >= $ts_hour) {
+            return gmdate("G часов назад", $time_diff);
+        }
 
-  // функция, преобразующая временную метку в "человеческий" вид
-  function time_format($ts) {
-    $now = strtotime('now');
-    $time_diff = $now - $ts;
-    $ts_day = 60 * 60 * 24;
-    $ts_hour = 60 * 60;
-    $ts_minute = 60;
+        if ($time_diff >= $ts_minute) {
+            return ltrim(gmdate("i минут назад", $time_diff), 0);
+        }
 
-    if ($time_diff > $ts_day) {
-      return date("d.m.y в H:i", $ts);
+        return "Менее минуты назад";
     }
 
-    if ($time_diff >= $ts_hour) {
-      return gmdate("G часов назад", $time_diff);
+    // функция вычисления разницы времени между двумя датами в формате чч:мм:сс
+    function time_different_calc($start, $end)
+    {
+        $date_diff = $end - $start;
+        $hours = floor(($date_diff) / (60 * 60));
+        $mins = floor(($date_diff - ($hours * 60 * 60)) / 60);
+        $seconds = floor(($date_diff - ($hours * 60 * 60) - ($mins * 60)));
+
+        if ($hours < 10) {
+            $hours = '0' . $hours;
+        }
+
+        if ($mins < 10) {
+            $mins = '0' . $mins;
+        }
+
+        if ($seconds < 10) {
+            $seconds = '0' . $seconds;
+        }
+
+        return $hours . ':' . $mins . ':' . $seconds;
     }
 
-    if ($time_diff >= $ts_minute) {
-      return ltrim(gmdate("i минут назад", $time_diff), 0);
+    // функция фильтрации строки текста
+    function filter_text($value)
+    {
+        return trim(htmlspecialchars($value));
     }
 
-    return "Менее минуты назад";
-  }
+    // функция проверки на число
+    function validate_number($value)
+    {
+        if ((filter_var($value, FILTER_VALIDATE_INT) === false) || ((int)$value < 0)) {
+            return false;
+        }
 
-  // функция вычисления разницы времени между двумя датами в формате чч:мм:сс
-  function time_different_calc($start, $end) {
-    $date_diff = $end - $start;
-    $hours = floor(($date_diff) / (60 * 60));
-    $mins = floor(($date_diff - ($hours * 60 * 60)) / 60);
-    $seconds = floor(($date_diff - ($hours * 60 * 60) - ($mins * 60)));
-
-    if ($hours < 10) {
-      $hours = '0' . $hours;
+        return true;
     }
 
-    if ($mins < 10) {
-      $mins = '0' . $mins;
+    // валидация email
+    function validate_email($value)
+    {
+        return filter_var($value, FILTER_VALIDATE_EMAIL);
     }
 
-    if ($seconds < 10) {
-      $seconds = '0' . $seconds;
-    }
+    // проверка на файл изображение
+    function validate_image_file($file)
+    {
+        $image_types = ['image/png', 'image/jpeg'];
+        $file_type = mime_content_type($file['tmp_name']);
 
-    return $hours . ':' . $mins . ':' . $seconds;
-  }
+        foreach ($image_types as $image_type) {
+            if ($file_type === $image_type) {
+                return true;
+            }
+        }
 
-  // функция фильтрации строки текста
-  function filter_text($value) {
-    return trim(htmlspecialchars($value));
-  }
-
-  // функция проверки на число
-  function validate_number($value) {
-    if ((filter_var($value, FILTER_VALIDATE_INT) === false) || ((int)$value < 0)) {
         return false;
     }
 
-    return true;
-  }
+    // перемещение файла в указанную папку и получение его пути
+    function move_uploaded_file_to_dir($file, $path)
+    {
+        $file_name = $file['name'];
+        $file_tmp_name = $file['tmp_name'];
+        $file_type = $file['type'];
+        $file_path = __DIR__ . $path;
 
-  // валидация email
-  function validate_email($value) {
-    return filter_var($value, FILTER_VALIDATE_EMAIL);
-  }
+        move_uploaded_file($file_tmp_name, $file_path . $file_name);
+        $new_file_url = $path . $file_name;
 
-  // проверка на файл изображение
-  function validate_image_file($file) {
-    $image_types = ['image/png', 'image/jpeg'];
-    $file_type = mime_content_type($file['tmp_name']);
-
-    foreach ($image_types as $image_type) {
-      if ($file_type === $image_type) {
-        return true;
-      }
-    }
-    return false;
-  }
-
-  // перемещение файла в указанную папку и получение его пути
-  function move_uploaded_file_to_dir($file, $path) {
-    $file_name = $file['name'];
-    $file_tmp_name = $file['tmp_name'];
-    $file_type = $file['type'];
-    $file_path = __DIR__ . $path;
-
-    move_uploaded_file($file_tmp_name, $file_path . $file_name);
-    $new_file_url = $path . $file_name;
-
-    return $new_file_url;
-  }
-
-  // создание отпечатка пользователя
-  function user_fingerprint($include_ip = true, $include_city = true) {
-    $ip_addr = $_SERVER['REMOTE_ADDR'];
-    $useragent = $_SERVER['HTTP_USER_AGENT'];
-    $geo_data = file_get_contents('https://freegeoip.net/json/' . $ip_addr);
-    $json = json_decode($geo_data, true);
-    $parts = [$useragent, $json['country_code']];
-
-    if ($include_ip) {
-      $parts[] = $ip_addr;
+        return $new_file_url;
     }
 
-    if ($include_city) {
-      $parts[] = $json['city'];
-    }
+    // поиск email пользователя
+    function search_user_by_email($email, $users)
+    {
+        $result = null;
 
-    $str = implode('', $parts);
-    $fingerprint = md5($str);
-
-    return $fingerprint;
-  }
-
-  // поиск email пользователя
-  function search_user_by_email($email, $users) {
-    $result = null;
-
-    foreach ($users as $user) {
-      if ($user['email'] == $email) {
-        $result = $user;
-        break;
-      }
-    }
-    return $result;
-  }
-
-  // функция выполнения запроса SELECT
-  function select_data($connect, $query, $data = []) {
-    $rows = [];
-
-    $prepared_query = db_get_prepare_stmt($connect, $query, $data);
-
-    if ($prepared_query) {
-      $is_execute = mysqli_stmt_execute($prepared_query);
-
-      if ($is_execute) {
-        $result = mysqli_stmt_get_result($prepared_query);
-
-        if ($result) {
-          $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
+        foreach ($users as $user) {
+            if ($user['email'] == $email) {
+                $result = $user;
+                break;
+            }
         }
-      }
+        return $result;
     }
 
-    return $rows;
-  }
+    // функция выполнения запроса SELECT
+    function select_data($connect, $query, $data = [])
+    {
+        $rows = [];
 
-  // функция выполнения запроса INSERT
-  function insert_data($connect, $table, $data) {
-    $column_names = '';
-    $values = [];
-    $values_count = '';
+        $prepared_query = db_get_prepare_stmt($connect, $query, $data);
 
-    foreach ($data as $key => $value) {
-      $column_names .= "$key, ";
-      $values[] = $value;
-      $values_count .= "?, ";
+        if ($prepared_query) {
+            $is_execute = mysqli_stmt_execute($prepared_query);
+
+            if ($is_execute) {
+                $result = mysqli_stmt_get_result($prepared_query);
+
+                if ($result) {
+                    $rows = mysqli_fetch_all($result, MYSQLI_ASSOC);
+                }
+            }
+        }
+
+        return $rows;
     }
 
-    $column_names = substr($column_names, 0, -2);
-    $values_count = substr($values_count, 0, -2);
+    // функция выполнения запроса INSERT
+    function insert_data($connect, $table, $data)
+    {
+        $column_names = '';
+        $values = [];
+        $values_count = '';
 
-    $query = 'INSERT INTO ' . $table . ' ('. $column_names .')' . ' VALUES (' . $values_count .')';
+        foreach ($data as $key => $value) {
+            $column_names .= "$key, ";
+            $values[] = $value;
+            $values_count .= "?, ";
+        }
 
-    $prepared_query = db_get_prepare_stmt($connect, $query, $values);
+        $column_names = substr($column_names, 0, -2);
+        $values_count = substr($values_count, 0, -2);
 
-    if ($prepared_query) {
+        $query = 'INSERT INTO ' . $table . ' ('. $column_names .')' . ' VALUES (' . $values_count .')';
 
-      $is_execute = mysqli_stmt_execute($prepared_query);
+        $prepared_query = db_get_prepare_stmt($connect, $query, $values);
 
-      if ($is_execute) {
+        if ($prepared_query) {
 
-        $last_id = mysqli_stmt_insert_id($prepared_query);
+            $is_execute = mysqli_stmt_execute($prepared_query);
 
-        return $last_id;
-      }
+            if ($is_execute) {
+
+                $last_id = mysqli_stmt_insert_id($prepared_query);
+
+                return $last_id;
+            }
+        }
+
+        return false;
     }
 
-    return false;
-  }
+    // функция выполнения любых запросов, кроме SELECT и INSERT
+    function exec_query($connect, $query, $data = [])
+    {
+        $prepared_query = db_get_prepare_stmt($connect, $query, $data);
 
-  // функция выполнения любых запросов, кроме SELECT и INSERT
-  function exec_query($connect, $query, $data = []) {
-    $prepared_query = db_get_prepare_stmt($connect, $query, $data);
+        if ($prepared_query) {
+            $is_execute = mysqli_stmt_execute($prepared_query);
 
-    if ($prepared_query) {
-      $is_execute = mysqli_stmt_execute($prepared_query);
+            if ($is_execute) {
+                return true;
+            }
+        }
 
-      if ($is_execute) {
-        return true;
-      }
+        return false;
     }
-
-    return false;
-  }
