@@ -1,14 +1,19 @@
 <section class="lot-item container">
-    <h2><?=$lot['title'];?></h2>
+
+    <h2><?=htmlspecialchars($lot['title']);?></h2>
+
     <div class="lot-item__content">
+
         <div class="lot-item__left">
             <div class="lot-item__image">
-                <img src="<?=$lot['img'];?>" width="730" height="548" alt="Сноуборд">
+                <img src="<?=htmlspecialchars($lot['img']);?>" width="730" height="548" alt="Сноуборд">
             </div>
             <p class="lot-item__category">Категория: <span><?=$lot['category'];?></span></p>
-            <p class="lot-item__description"><?=$lot['description'];?></p>
+            <p class="lot-item__description"><?=htmlspecialchars($lot['description']);?></p>
         </div>
+
         <div class="lot-item__right">
+
             <?php if ($user && !($user['id'] === $lot['author_id'])): ?>
                 <?php if (!$is_done_bet): ?>
                     <div class="lot-item__state">
@@ -18,7 +23,7 @@
                         <div class="lot-item__cost-state">
                             <div class="lot-item__rate">
                                 <span class="lot-item__amount">Текущая цена</span>
-                                <span class="lot-item__cost"><?=$lot['lot_price'];?></span>
+                                <span class="lot-item__cost"><?=htmlspecialchars($lot['lot_price']);?></span>
                             </div>
                             <div class="lot-item__min-cost">
                                 Мин. ставка <span><?=$lot['lot_price'] + $lot['bet_step'];?> р</span>
@@ -47,6 +52,7 @@
                     </div>
                 <?php endif; ?>
             <?php endif; ?>
+
             <div class="history">
                 <h3>История ставок (<span><?=$bets_count;?></span>)</h3>
                 <table class="history__list">
@@ -60,6 +66,9 @@
 
                 </table>
             </div>
+
         </div>
+
     </div>
+
 </section>
