@@ -13,7 +13,7 @@
     <div class="main-header__container container">
 
         <h1 class="visually-hidden">YetiCave</h1>
-        <?php if ($is_index_page): ?>
+        <?php if (isset($is_index_page)): ?>
             <a class="main-header__logo">
         <?php else: ?>
             <a class="main-header__logo" href="index.php">
@@ -29,7 +29,7 @@
 
         <nav class="user-menu">
 
-            <?php if ($user): ?>
+            <?php if (isset($user)): ?>
                 <div class="user-menu__image">
                     <img src="<?=htmlspecialchars($user['avatar_path']);?>" width="40" height="40" alt="Пользователь">
                 </div>
@@ -52,20 +52,25 @@
     </div>
 </header>
 
-<?php if ($is_index_page): ?>
+<?php if (isset($is_index_page)): ?>
     <main class="container">
-<?php else: ?>
+<?php elseif (isset($current_category_id)): ?>
     <main>
         <?php print(render_template('templates/nav.php', ['categories' => $categories, 'categories_id' => $categories_id, 'current_category_id' => $current_category_id])); ?>
+<?php else: ?>
+    <main>
+        <?php print(render_template('templates/nav.php', ['categories' => $categories, 'categories_id' => $categories_id, 'current_category_id' => -1])); ?>
 <?php endif; ?>
         <?=$page_content;?>
 </main>
 
 <footer class="main-footer">
 
-    <?php
-        print(render_template('templates/nav.php', ['categories' => $categories, 'categories_id' => $categories_id, 'current_category_id' => $current_category_id]));
-    ?>
+    <?php if (isset($current_category_id)): ?>
+        <?php print(render_template('templates/nav.php', ['categories' => $categories, 'categories_id' => $categories_id, 'current_category_id' => $current_category_id])); ?>
+    <?php else: ?>
+        <?php print(render_template('templates/nav.php', ['categories' => $categories, 'categories_id' => $categories_id, 'current_category_id' => -1])); ?>
+    <?php endif; ?>
 
     <div class="main-footer__bottom container">
         <div class="main-footer__copyright">

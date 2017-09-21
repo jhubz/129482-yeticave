@@ -54,7 +54,7 @@
         $name = htmlspecialchars($_POST['name']) ?? '';
         $message = htmlspecialchars($_POST['message']) ?? '';
 
-        $file_url = $_SESSION['photo-signup-path'] ?? '';
+        $file_url = $_SESSION['photo-signup-path'] ?? null;
 
         if (!count($errors)) {
 
@@ -98,6 +98,10 @@
             } else {
                 if (isset($_SESSION['photo-signup-path'])) {
                     unset($_SESSION['photo-signup-path']);
+                }
+
+                if (!$file_url) {
+                    $file_url = 'img/user.jpg';
                 }
 
                 $inserted_user_id = insert_data($connect, 'users',
@@ -152,7 +156,11 @@
 
     $page_content = render_template('templates/sign-up.php',
         [
-            'errors' => $errors
+            'errors' => $errors,
+            'name' => '',
+            'email' => '',
+            'message' => '',
+            'file_url' => null
         ]
     );
 

@@ -9,7 +9,7 @@
 
     if (isset($_GET['category_id']) && isset($_GET['page'])) {
 
-        $category_name = '';
+        $category_name = null;
 
         foreach ($categories_id as $index => $value) {
             if ($value === intval($_GET['category_id'])) {
@@ -31,9 +31,9 @@
                 AND category_id = ?
             ';
 
-            $lots_count = null;
+            $lots_count = 0;
             $lots_count_result = select_data($connect, $lots_count_query, [$category_id]);
-            if (isset($lots_count_result)) {
+            if ($lots_count_result) {
                 $lots_count = $lots_count_result[0]['lots_count'];
             }
 

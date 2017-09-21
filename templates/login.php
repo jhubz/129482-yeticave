@@ -17,7 +17,7 @@
     <?php endif; ?>
         <label for="email">E-mail*</label>
         <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?=htmlspecialchars($email);?>">
-        <?php if ($invalid_email_message): ?>
+        <?php if (isset($invalid_email_message)): ?>
             <span class="form__error"><?=$invalid_email_message?></span>
         <?php else: ?>
             <span class="form__error">Введите e-mail</span>
@@ -31,7 +31,7 @@
     <?php endif; ?>
         <label for="password">Пароль*</label>
         <input id="password" type="text" name="password" placeholder="Введите пароль">
-        <?php if ($invalid_password_message): ?>
+        <?php if (isset($invalid_password_message)): ?>
             <span class="form__error"><?=$invalid_password_message?></span>
         <?php else: ?>
             <span class="form__error">Введите пароль</span>

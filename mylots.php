@@ -26,8 +26,8 @@
     ';
 
     $bets = select_data($connect, $mylots_query, [$user['id']]);
-    
-    if (isset($bets)) {
+
+    if ($bets) {
         $page_content = render_template('templates/mylots.php',
             [
                 'bets' => $bets

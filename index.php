@@ -12,12 +12,10 @@
 
     $categories_classes = ['boards', 'attachment', 'boots', 'clothing', 'tools', 'other'];
 
-    $page_number = null;
+    $page_number = 1;
 
     if (isset($_GET['page'])) {
         $page_number = (int)$_GET['page'];
-    } else {
-        $page_number = 1;
     }
 
     $limit = 3;
@@ -29,9 +27,9 @@
         WHERE complete_date > NOW()
     ';
 
-    $lots_count = null;
+    $lots_count = 0;
     $lots_count_result = select_data($connect, $lots_count_query);
-    if (isset($lots_count_result)) {
+    if ($lots_count_result) {
         $lots_count = $lots_count_result[0]['lots_count'];
     }
 
@@ -59,7 +57,7 @@
 
     $lots = select_data($connect, $lots_query, [$limit, $offset]);
 
-    if (isset($lots)) {
+    if ($lots) {
         $pages_count = (int)ceil($lots_count / $limit);
 
         $page_content = render_template('templates/index.php',

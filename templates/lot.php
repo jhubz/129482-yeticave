@@ -14,8 +14,8 @@
 
         <div class="lot-item__right">
 
-            <?php if ($user && !($user['id'] === $lot['author_id'])): ?>
-                <?php if (!$is_done_bet): ?>
+            <?php if (isset($user) && !($user['id'] === $lot['author_id'])): ?>
+                <?php if (!isset($is_done_bet) || !$is_done_bet): ?>
                     <div class="lot-item__state">
                         <div class="lot-item__timer timer">
                             <?=time_different_calc(strtotime('now'), strtotime($lot['complete_date']));?>
@@ -26,7 +26,7 @@
                                 <span class="lot-item__cost"><?=htmlspecialchars($lot['lot_price']);?></span>
                             </div>
                             <div class="lot-item__min-cost">
-                                Мин. ставка <span><?=$lot['lot_price'] + $lot['bet_step'];?> р</span>
+                                Мин. ставка <span><?=htmlspecialchars($lot['lot_price'] + $lot['bet_step']);?> р</span>
                             </div>
                         </div>
                         <?php if ($errors): ?>
@@ -41,10 +41,10 @@
                             <? endif; ?>
                                 <label for="cost">Ваша ставка</label>
                                 <?php if (in_array('cost', $errors)): ?>
-                                    <input id="cost" style="border: 1px solid #f84646;" type="number" name="cost" placeholder="<?=$lot['lot_price'] + $lot['bet_step'];?>" value="<?=$cost;?>">
+                                    <input id="cost" style="border: 1px solid #f84646;" type="number" name="cost" placeholder="<?=htmlspecialchars($lot['lot_price'] + $lot['bet_step']);?>" value="<?=$cost;?>">
                                     <span class="form__error"><?=$errors_messages['cost'];?></span>
                                 <?php else: ?>
-                                    <input id="cost" type="number" name="cost" placeholder="<?=$lot['lot_price'] + $lot['bet_step'];?>" value="<?=$cost;?>">
+                                    <input id="cost" type="number" name="cost" placeholder="<?=htmlspecialchars($lot['lot_price'] + $lot['bet_step']);?>" value="<?=$cost;?>">
                                 <?php endif; ?>
                             </p>
                             <button type="submit" class="button">Сделать ставку</button>

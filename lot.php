@@ -65,11 +65,25 @@
             }
         }
 
-        if (!$lot) {
+        if (!isset($lot)) {
             http_response_code(404);
-            print("Такой страницы не существует (ошибка 404)");
+
+            $page_content = render_template('templates/error.php', ['error_message' => 'Такой страницы не существует (ошибка 404)']);
+
+            $layout_content = render_template('templates/layout.php',
+                [
+                    'page_content' => $page_content,
+                    'categories' => $categories,
+                    'categories_id' => $categories_id,
+                    'user' => $user,
+                    'page_title' => 'Лот не найден'
+                ]
+            );
+
+            print($layout_content);
 
             die();
+            
         } else {
 
             $errors = [];
@@ -183,5 +197,18 @@
         }
     } else {
         http_response_code(404);
-        print("Такой страницы не существует (ошибка 404)");
+
+        $page_content = render_template('templates/error.php', ['error_message' => 'Такой страницы не существует (ошибка 404)']);
+
+        $layout_content = render_template('templates/layout.php',
+            [
+                'page_content' => $page_content,
+                'categories' => $categories,
+                'categories_id' => $categories_id,
+                'user' => $user,
+                'page_title' => 'Лот не найден'
+            ]
+        );
+
+        print($layout_content);
     }

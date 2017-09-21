@@ -56,7 +56,7 @@
         <div class="form__item form__item--wide">
     <?php endif; ?>
         <label for="message">Описание</label>
-        <textarea id="message" name="message" placeholder="Напишите описание лота"><?=$message;?></textarea>
+        <textarea id="message" name="message" placeholder="Напишите описание лота"><?=htmlspecialchars($message);?></textarea>
         <span class="form__error">
             <?php
                 if (in_array('message', $errors)) {
