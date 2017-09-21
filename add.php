@@ -8,9 +8,11 @@
     } else {
         http_response_code(403);
 
+        $page_content = render_template('templates/error.php', ['error_message' => 'Неавторизованный пользователь (ошибка 403)']);
+
         $layout_content = render_template('templates/layout.php',
             [
-                'page_content' => 'Неавторизованный пользователь (ошибка 403)',
+                'page_content' => $page_content,
                 'categories' => $categories,
                 'categories_id' => $categories_id,
                 'user' => $user,
@@ -23,12 +25,25 @@
         die();
     }
 
-    // проверка категории
+    /**
+     * Проверка категории
+     *
+     * @param string $value Проверяемая категория
+     *
+     * @return bool
+     */
     function validate_category($value) {
         return $value !== 'Выберите категорию';
     }
 
     // проверка даты на формат дд.мм.гггг
+    /**
+     * Проверка даты на формат дд.мм.гггг
+     *
+     * @param string $value Проверяемая дата
+     *
+     * @return bool
+     */
     function validate_date($value) {
 
         $now_ts = strtotime('now');
@@ -84,6 +99,7 @@
             }
         }
 
+        $file_url = null;
         if (isset($_FILES['photo2'])) {
             $file = $_FILES['photo2'];
 
@@ -122,7 +138,7 @@
 
             $selected_categories = select_data($connect, $category_query, [$category]);
 
-            if (isset($selected_categories)) {
+            if ($selected_categories) {
 
                 foreach ($selected_categories as $value) {
                     $selected_category_id = $value['id'];
@@ -193,7 +209,14 @@
         [
             'categories' => $categories,
             'errors' => $errors,
-            'errors_messages' => $errors_messages
+            'errors_messages' => $errors_messages,
+
+            'lot_name' => '',
+            'message' => '',
+            'file_url' => null,
+            'lot_rate' => null,
+            'lot_step' => null,
+            'lot_date' => null
         ]
     );
 

@@ -31,4 +31,6 @@
             $categories_id[] = $value['id'];
             $categories[] = $value['name'];
         }
+
+        $user = null;
     }

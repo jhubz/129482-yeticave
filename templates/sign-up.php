@@ -70,7 +70,7 @@
         </span>
     </div>
 
-    <?php if ($file_url): ?>
+    <?php if (isset($file_url)): ?>
         <div class="form__item form__item--file form__item--uploaded">
     <?php else: ?>
         <div class="form__item form__item--file form__item--last">

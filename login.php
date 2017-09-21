@@ -121,10 +121,13 @@
         }
     }
 
+    $signup_message = $_SESSION['signup_message'] ?? '';
+
     $page_content = render_template('templates/login.php',
         [
             'errors' => $errors,
-            'message' => $_SESSION['signup_message']
+            'message' => $signup_message,
+            'email' => ''
         ]
     );
 

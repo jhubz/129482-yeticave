@@ -3,10 +3,10 @@
     /**
      * Генерирует шаблон страницы
      *
-     * @param $path string Путь до шаблона
+     * @param string $path Путь до шаблона
      * @param array $data Данные для вставки передачи в шаблон
      *
-     * @return ????????????????????????????
+     * @return string Содержимое текущего буфера
      */
     function render_template($path, $data)
     {
@@ -22,7 +22,13 @@
         return ob_get_clean();
     }
 
-    // функция, преобразующая временную метку в "человеческий" вид
+    /**
+     * Преобразует временную метку в 'человеческий' вид
+     *
+     * @param integer $ts Временная метка
+     *
+     * @return string Время в 'человеческом' виде
+     */
     function time_format($ts)
     {
         $now = strtotime('now');
@@ -46,7 +52,14 @@
         return "Менее минуты назад";
     }
 
-    // функция вычисления разницы времени между двумя датами в формате чч:мм:сс
+    /**
+     * Вычисление разницы времени между двумя датами
+     *
+     * @param integer $start Временная метка начала
+     * @param integer $end Временная метка окончания
+     *
+     * @return string Время в формате чч:мм:сс
+     */
     function time_different_calc($start, $end)
     {
         $date_diff = $end - $start;
@@ -69,13 +82,26 @@
         return $hours . ':' . $mins . ':' . $seconds;
     }
 
-    // функция фильтрации строки текста
+    /**
+     * Фильтрации строки текста
+     *
+     * @param string $value Строка
+     *
+     * @return string Отфильтрованная строка
+     */
     function filter_text($value)
     {
         return trim(htmlspecialchars($value));
     }
 
     // функция проверки на число
+    /**
+     * Проверка на число
+     *
+     * @param string|integer $value Входящее значение
+     *
+     * @return bool
+     */
     function validate_number($value)
     {
         if ((filter_var($value, FILTER_VALIDATE_INT) === false) || ((int)$value < 0)) {
@@ -85,13 +111,25 @@
         return true;
     }
 
-    // валидация email
+    /**
+     * Валидация email
+     *
+     * @param string $value Проверяемый email
+     *
+     * @return bool
+     */
     function validate_email($value)
     {
         return filter_var($value, FILTER_VALIDATE_EMAIL);
     }
 
-    // проверка на файл изображение
+    /**
+     * Проверка на файл изображения
+     *
+     * @param array $file Файл из массива $_FILES
+     *
+     * @return bool
+     */
     function validate_image_file($file)
     {
         $image_types = ['image/png', 'image/jpeg'];
@@ -106,7 +144,14 @@
         return false;
     }
 
-    // перемещение файла в указанную папку и получение его пути
+    /**
+     * Перемещение файла в указанную папку
+     *
+     * @param array $file Файл из массива $_FILES
+     * @param string $path Путь до папки, в которую нужно переместить файл
+     *
+     * @return string Полный путь до файла на сервере
+     */
     function move_uploaded_file_to_dir($file, $path)
     {
         $file_name = $file['name'];
@@ -120,21 +165,15 @@
         return $new_file_url;
     }
 
-    // поиск email пользователя
-    function search_user_by_email($email, $users)
-    {
-        $result = null;
-
-        foreach ($users as $user) {
-            if ($user['email'] == $email) {
-                $result = $user;
-                break;
-            }
-        }
-        return $result;
-    }
-
-    // функция выполнения запроса SELECT
+    /**
+     * Выполнения запроса SELECT
+     *
+     * @param resourse $connect Ресурс соединения
+     * @param string $query SQL запрос в базу данных
+     * @param array $data Массив данных для подстановки в подготовленное выражение
+     *
+     * @return array Строки из базы данных
+     */
     function select_data($connect, $query, $data = [])
     {
         $rows = [];
@@ -156,7 +195,15 @@
         return $rows;
     }
 
-    // функция выполнения запроса INSERT
+    /**
+     * Выполнения запроса INSERT
+     *
+     * @param resourse $connect Ресурс соединения
+     * @param string $table Таблица, в которую будет записан запрос
+     * @param array $data Массив данных для подстановки в подготовленное выражение
+     *
+     * @return integer id встравленной строки
+     */
     function insert_data($connect, $table, $data)
     {
         $column_names = '';
@@ -191,7 +238,15 @@
         return false;
     }
 
-    // функция выполнения любых запросов, кроме SELECT и INSERT
+    /**
+     * Выполнение любых запросов, кроме SELECT и INSERT
+     *
+     * @param resourse $connect Ресурс соединения
+     * @param string $query SQL запрос в базу данных
+     * @param array $data Массив данных для подстановки в подготовленное выражение
+     *
+     * @return bool
+     */
     function exec_query($connect, $query, $data = [])
     {
         $prepared_query = db_get_prepare_stmt($connect, $query, $data);
