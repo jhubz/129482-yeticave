@@ -16,6 +16,7 @@
 
         extract($data);
 
+        ob_clean();
         ob_start();
         require $path;
 
