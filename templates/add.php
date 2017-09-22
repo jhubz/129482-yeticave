@@ -133,7 +133,7 @@
             <div class="form__item">
         <?php endif; ?>
             <label for="lot-date">Дата завершения</label>
-            <input class="form__input-date" id="lot-date" type="text" name="lot-date" placeholder="20.05.2017" value="<?=$lot_date;?>">
+            <input class="form__input-date" id="lot-date" type="date" name="lot-date" placeholder="20.05.2017" value="<?=$lot_date;?>">
             <span class="form__error">
                 <?php
                     if (in_array('lot-date', $errors)) {

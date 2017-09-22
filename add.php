@@ -36,7 +36,6 @@
         return $value !== 'Выберите категорию';
     }
 
-    // проверка даты на формат дд.мм.гггг
     /**
      * Проверка даты на формат дд.мм.гггг
      *
@@ -53,8 +52,15 @@
             return false;
         }
 
-        $date_arr = explode('.', $value);
-        return checkdate($date_arr[1], $date_arr[0], $date_arr[2]);
+        if (strpos($_SERVER['HTTP_USER_AGENT'], 'Firefox')) {
+            $date_arr = explode('.', $value);
+            return checkdate($date_arr[1], $date_arr[0], $date_arr[2]);
+        } else {
+            $date_arr = explode('-', $value);
+            return checkdate($date_arr[1], $date_arr[2], $date_arr[0]);
+        }
+
+
 
     }
 
@@ -105,7 +111,7 @@
 
             if (!empty($file['name'])) {
                 if (validate_image_file($file)) {
-                    $new_file_url = move_uploaded_file_to_dir($file, '/img/');
+                    $new_file_url = resize_and_upload_image($file, 730, 548, '/img/');
                     $_SESSION['photo-add-path'] = $new_file_url;
                     $file_url = $new_file_url;
                 } else {

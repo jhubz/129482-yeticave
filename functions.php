@@ -145,24 +145,57 @@
     }
 
     /**
-     * Перемещение файла в указанную папку
+     * Изменение размера и загрузка файла изображения в выбранную папку
      *
-     * @param array $file Файл из массива $_FILES
-     * @param string $path Путь до папки, в которую нужно переместить файл
+     * @param array $image_file Файл из массива $_FILES
+     * @param integer $width Ширина изображения, до которой его нужно изменить
+     * @param integer $height Высота изображения, до которой его нужно изменить
+     * @param string $path Путь до папки, в которую будет загружен файл
      *
-     * @return string Полный путь до файла на сервере
+     * @return bool
      */
-    function move_uploaded_file_to_dir($file, $path)
+    function resize_and_upload_image($image_file, $width, $height, $path)
     {
-        $file_name = $file['name'];
-        $file_tmp_name = $file['tmp_name'];
-        $file_type = $file['type'];
-        $file_path = __DIR__ . $path;
+        $file_type = mime_content_type($image_file['tmp_name']);
+        $image_file_path = $image_file['tmp_name'];
 
-        move_uploaded_file($file_tmp_name, $file_path . $file_name);
-        $new_file_url = $path . $file_name;
+        list($orig_width, $orig_height) = getimagesize($image_file_path);
 
-        return $new_file_url;
+        $orig_ratio = $orig_width / $orig_height;
+
+        if ($width / $height > $orig_ratio) {
+            $height = $width / $orig_ratio;
+        } else {
+            $width = $height * $orig_ratio;
+        }
+
+        $new_image = imagecreatetruecolor($width, $height);
+
+        $orig_image = null;
+
+        switch ($file_type) {
+            case 'image/jpeg':
+                $orig_image = imagecreatefromjpeg($image_file_path);
+                break;
+            case 'image/png':
+                $orig_image = imagecreatefrompng($image_file_path);
+                break;
+        }
+
+        imagecopyresampled(
+            $new_image, $orig_image,
+            0, 0, 0, 0,
+            $width, $height,
+            $orig_width, $orig_height
+        );
+
+        $hash_file_name = sha1_file($image_file_path) . '.jpg';
+
+        $path_to_new_image = $path . $hash_file_name;
+
+        imagejpeg($new_image, __DIR__ . $path_to_new_image);
+
+        return $path_to_new_image;
     }
 
     /**

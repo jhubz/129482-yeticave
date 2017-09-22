@@ -40,7 +40,7 @@
 
             if (!empty($file['name'])) {
                 if (validate_image_file($file)) {
-                    $new_file_url = move_uploaded_file_to_dir($file, '/img/');
+                    $new_file_url = resize_and_upload_image($file, 40, 40, '/img/');
                     $_SESSION['photo-signup-path'] = $new_file_url;
                 } else {
                     $errors[] = 'photo2';
