@@ -12,16 +12,7 @@
             ]
         );
 
-        $layout_content = render_template('templates/layout.php',
-            [
-                'page_content' => $page_content,
-                'categories' => $categories,
-                'user' => $user,
-                'page_title' => 'Ошибка'
-            ]
-        );
-
-        print($layout_content);
+        print($page_content);
 
         die();
     } else {
