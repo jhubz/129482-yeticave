@@ -16,7 +16,11 @@
 
         extract($data);
 
-        ob_clean();
+        if (ob_get_length()) {
+            ob_start();
+            ob_end_clean();
+        }
+
         ob_start();
         require $path;
 
