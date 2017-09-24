@@ -8,5 +8,7 @@
             "email": "jhubz@list.ru"
         }
     ],
-    "require": {}
+    "require": {
+        "swiftmailer/swiftmailer": "@stable"
+    }
 }
