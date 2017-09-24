@@ -6,6 +6,24 @@
 
     if (isset($_SESSION['user'])) {
         $user = $_SESSION['user'];
+    } else {
+        http_response_code(403);
+
+        $page_content = render_template('templates/error.php', ['error_message' => 'Неавторизованный пользователь (ошибка 403)']);
+
+        $layout_content = render_template('templates/layout.php',
+            [
+                'page_content' => $page_content,
+                'categories' => $categories,
+                'categories_id' => $categories_id,
+                'user' => $user,
+                'page_title' => 'Мои ставки'
+            ]
+        );
+
+        print($layout_content);
+
+        die();
     }
 
     $mylots_query =
