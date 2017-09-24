@@ -1,6 +1,12 @@
 {
-    "name": "yeticave",
-    "description": "Личный проект «YetiCave» от HTML Academy",
+    "name": "jhubz/yeticave",
+    "description": "project yeticave",
     "type": "project",
+    "authors": [
+        {
+            "name": "jhubz",
+            "email": "jhubz@list.ru"
+        }
+    ],
     "require": {}
 }
