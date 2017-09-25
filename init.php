@@ -18,6 +18,8 @@
         die();
     } else {
 
+        mysqli_set_charset($connect, "utf8");
+
         $select_categories_result = select_data($connect, 'SELECT id, name FROM categories');
         foreach ($select_categories_result as $value) {
             $categories_id[] = $value['id'];
