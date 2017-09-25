@@ -89,18 +89,6 @@
         return $hours . ':' . $mins . ':' . $seconds;
     }
 
-    /**
-     * Фильтрации строки текста
-     *
-     * @param string $value Строка
-     *
-     * @return string Отфильтрованная строка
-     */
-    function filter_text($value)
-    {
-        return trim(htmlspecialchars($value));
-    }
-
     // функция проверки на число
     /**
      * Проверка на число
