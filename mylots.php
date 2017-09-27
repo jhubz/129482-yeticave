@@ -26,7 +26,7 @@
         die();
     }
 
-    $mylots_query =
+    $bets_query =
         'SELECT
             lots.img_path as img,
             lots.id as lot_id,
@@ -44,7 +44,7 @@
         ORDER BY bets.placement_date DESC
     ';
 
-    $bets = select_data($connect, $mylots_query, [$user['id']]);
+    $bets = select_data($connect, $bets_query, [$user['id']]);
 
     if ($bets) {
         $page_content = render_template('templates/mylots.php',

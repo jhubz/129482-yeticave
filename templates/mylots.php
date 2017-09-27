@@ -8,7 +8,7 @@
             <tr class="rates__item">
                 <td class="rates__info">
                     <div class="rates__img">
-                        <img src="<?=htmlspecialchars($bet['img']);?>" width="54" height="40" alt="Сноуборд">
+                        <img src="<?=$bet['img'];?>" width="54" height="40" alt="Сноуборд">
                     </div>
                     <h3 class="rates__title"><a href="lot.php?id=<?=$bet['lot_id'];?>"><?=htmlspecialchars($bet['title']);?></a></h3>
                 </td>

@@ -1,7 +1,7 @@
 <li class="lots__item lot">
 
     <div class="lot__image">
-        <img src="<?=htmlspecialchars($lot['img']);?>" width="350" height="260" alt="Сноуборд">
+        <img src="<?=$lot['img'];?>" width="350" height="260" alt="Сноуборд">
     </div>
 
     <div class="lot__info">
@@ -14,7 +14,7 @@
                 <?php else: ?>
                     <span class="lot__amount">Стартовая цена</span>
                 <?php endif; ?>
-                <span class="lot__cost"><?=htmlspecialchars($lot['lot_price']);?><b class="rub">р</b></span>
+                <span class="lot__cost"><?=$lot['lot_price'];?><b class="rub">р</b></span>
             </div>
             <div class="lot__timer timer">
                 <?=time_different_calc(strtotime('now'), strtotime($lot['complete_date']));?>

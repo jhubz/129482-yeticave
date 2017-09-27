@@ -196,7 +196,7 @@
     /**
      * Выполнения запроса SELECT
      *
-     * @param resourse $connect Ресурс соединения
+     * @param mysqli $connect Ресурс соединения
      * @param string $query SQL запрос в базу данных
      * @param array $data Массив данных для подстановки в подготовленное выражение
      *
@@ -226,28 +226,28 @@
     /**
      * Выполнения запроса INSERT
      *
-     * @param resourse $connect Ресурс соединения
+     * @param mysqli $connect Ресурс соединения
      * @param string $table Таблица, в которую будет записан запрос
      * @param array $data Массив данных для подстановки в подготовленное выражение
      *
-     * @return integer id встравленной строки
+     * @return integer id вставленной строки
      */
     function insert_data($connect, $table, $data)
     {
         $column_names = '';
         $values = [];
-        $values_count = '';
+        $values_placeholders = '';
 
         foreach ($data as $key => $value) {
             $column_names .= "$key, ";
             $values[] = $value;
-            $values_count .= "?, ";
+            $values_placeholders .= "?, ";
         }
 
         $column_names = substr($column_names, 0, -2);
-        $values_count = substr($values_count, 0, -2);
+        $values_placeholders = substr($values_placeholders, 0, -2);
 
-        $query = 'INSERT INTO ' . $table . ' ('. $column_names .')' . ' VALUES (' . $values_count .')';
+        $query = 'INSERT INTO ' . $table . ' ('. $column_names .')' . ' VALUES (' . $values_placeholders .')';
 
         $prepared_query = db_get_prepare_stmt($connect, $query, $values);
 
@@ -269,7 +269,7 @@
     /**
      * Выполнение любых запросов, кроме SELECT и INSERT
      *
-     * @param resourse $connect Ресурс соединения
+     * @param mysqli $connect Ресурс соединения
      * @param string $query SQL запрос в базу данных
      * @param array $data Массив данных для подстановки в подготовленное выражение
      *

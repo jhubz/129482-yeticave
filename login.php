@@ -12,7 +12,7 @@
 
     $errors = [];
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         foreach ($_POST as $key => $value) {
             if (in_array($key, $required) && $value === '') {
@@ -28,7 +28,7 @@
             }
         }
 
-        $email = htmlspecialchars($_POST['email']) ?? '';
+        $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
 
         if (!count($errors)) {
