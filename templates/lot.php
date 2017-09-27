@@ -33,12 +33,12 @@
                             <form class="lot-item__form form--invalid" action="lot.php?id=<?=$lot['lot_id'];?>" method="post">
                         <?php else: ?>
                             <form class="lot-item__form" action="lot.php?id=<?=$lot['lot_id'];?>" method="post">
-                        <? endif; ?>
+                        <?php endif; ?>
                             <?php if (in_array('cost', $errors)): ?>
                                 <p class="lot-item__form-item form__item--invalid">
                             <?php else: ?>
                                 <p class="lot-item__form-item">
-                            <? endif; ?>
+                            <?php endif; ?>
                                 <label for="cost">Ваша ставка</label>
                                 <?php if (in_array('cost', $errors)): ?>
                                     <input id="cost" style="border: 1px solid #f84646;" type="number" name="cost" placeholder="<?=$lot['lot_price'] + $lot['bet_step'];?>" value="<?=$cost;?>">
