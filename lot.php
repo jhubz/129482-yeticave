@@ -48,8 +48,8 @@
         $lot_id = (int)$_GET['id'];
 
         $lots = select_data($connect, $lot_query, [$lot_id]);
-        foreach ($lots as $value) {
-            $lot = $value;
+        foreach ($lots as $lots_item) {
+            $lot = $lots_item;
         }
 
         $bets_count = 0;
@@ -90,7 +90,7 @@
             $errors = [];
             $errors_messages = [];
 
-            if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 $required = ['cost'];
 
@@ -119,12 +119,12 @@
                     }
                 }
 
-                if (!(in_array('cost', $errors)) && $value < ($lot['lot_price'] + $lot['bet_step'])) {
-                    $errors[] = $key;
-                    $errors_messages[$key] = 'Слишком низкая ставка';
-                }
+                $cost = $_POST['cost'] ?? '';
 
-                $cost = (int)$_POST['cost'] ?? '';
+                if (!(in_array('cost', $errors)) && $cost < ($lot['lot_price'] + $lot['bet_step'])) {
+                    $errors[] = 'cost';
+                    $errors_messages['cost'] = 'Слишком низкая ставка';
+                }
 
                 if (empty($errors)) {
 
@@ -196,6 +196,7 @@
 
             print($layout_content);
         }
+
     } else {
         http_response_code(404);
 

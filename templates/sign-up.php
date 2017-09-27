@@ -12,7 +12,7 @@
         <div class="form__item">
     <?php endif; ?>
         <label for="email">E-mail*</label>
-        <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?=htmlspecialchars($email);?>">
+        <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?=$email;?>">
         <span class="form__error">
             <?php
                 if (in_array('email', $errors)) {

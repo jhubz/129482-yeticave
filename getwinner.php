@@ -41,12 +41,14 @@
             WHERE id = ?;
         ';
 
-        foreach ($lots as $index => $value) {
-            $winner_bets = select_data($connect, $bets_query, [$value['id']]);
+        foreach ($lots as $index => $lots_item) {
+            $winner_bets = select_data($connect, $bets_query, [$lots_item['id']]);
 
             if ($winner_bets) {
-                foreach ($winner_bets as  $value) {
-                    $winner_bet = $value;
+
+                $winner_bet = null;
+                foreach ($winner_bets as $winner_bets_item) {
+                    $winner_bet = $winner_bets_item;
                 }
 
                 $is_query_exec = exec_query($connect, $update_winner_id_query,

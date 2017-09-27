@@ -16,7 +16,7 @@
         <div class="form__item">
     <?php endif; ?>
         <label for="email">E-mail*</label>
-        <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?=htmlspecialchars($email);?>">
+        <input id="email" type="text" name="email" placeholder="Введите e-mail" value="<?=$email;?>">
         <?php if (isset($invalid_email_message)): ?>
             <span class="form__error"><?=$invalid_email_message?></span>
         <?php else: ?>

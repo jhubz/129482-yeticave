@@ -31,7 +31,7 @@
 
             <?php if (isset($user)): ?>
                 <div class="user-menu__image">
-                    <img src="<?=htmlspecialchars($user['avatar_path']);?>" width="40" height="40" alt="Пользователь">
+                    <img src="<?=$user['avatar_path'];?>" width="40" height="40" alt="Пользователь">
                 </div>
                 <div class="user-menu__logged">
                     <p><?=htmlspecialchars($user['name']);?></p>

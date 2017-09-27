@@ -117,7 +117,7 @@
             <div class="form__item form__item--small">
         <?php endif; ?>
             <label for="lot-step">Шаг ставки</label>
-            <input id="lot-step"  name="lot-step" placeholder="0" value="<?=$lot_step;?>">
+            <input id="lot-step" name="lot-step" placeholder="0" value="<?=$lot_step;?>">
             <span class="form__error">
                 <?php
                     if (in_array('lot-step', $errors)) {

@@ -77,7 +77,7 @@
     $errors = [];
     $errors_messages = [];
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         foreach ($_POST as $key => $value) {
             if (in_array($key, $required) && $value === '') {
@@ -127,9 +127,9 @@
             }
         }
 
-        $title = htmlspecialchars($_POST['lot-name']) ?? '';
+        $title = $_POST['lot-name'] ?? '';
         $category = $_POST['category'] ?? '';
-        $message = htmlspecialchars($_POST['message']) ?? '';
+        $message = $_POST['message'] ?? '';
 
         $lot_rate = $_POST['lot-rate'] ?? '';
         $lot_step = $_POST['lot-step'] ?? '';
@@ -147,6 +147,7 @@
 
             if ($selected_categories) {
 
+                $selected_category_id = null;
                 foreach ($selected_categories as $value) {
                     $selected_category_id = $value['id'];
                 }

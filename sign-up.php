@@ -13,7 +13,7 @@
         'email' => 'validate_email',
     ];
 
-    if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         foreach ($_POST as $key => $value) {
             if (in_array($key, $required) && $value === '') {
@@ -50,10 +50,10 @@
             }
         }
 
-        $email = htmlspecialchars($_POST['email']) ?? '';
+        $email = $_POST['email'] ?? '';
         $password = $_POST['password'] ?? '';
-        $name = htmlspecialchars($_POST['name']) ?? '';
-        $message = htmlspecialchars($_POST['message']) ?? '';
+        $name = $_POST['name'] ?? '';
+        $message = $_POST['message'] ?? '';
 
         $file_url = $_SESSION['photo-signup-path'] ?? null;
 
