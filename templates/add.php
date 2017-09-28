@@ -32,7 +32,7 @@
             <select id="category" name="category">
                 <option>Выберите категорию</option>
                 <?php foreach ($categories as $category): ?>
-                    <?php if ($selected_category === $category): ?>
+                    <?php if (isset($selected_category) && $selected_category === $category): ?>
                         <option value="<?=$category;?>" selected><?=$category;?></option>
                     <?php else: ?>
                         <option value="<?=$category;?>"><?=$category;?></option>

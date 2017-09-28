@@ -14,4 +14,4 @@
         </ul>
     </nav>
 
-<? endif; ?>
+<?php endif; ?>

@@ -4,13 +4,13 @@
 
         <?php if ($page_number === 1): ?>
             <li class="pagination-item pagination-item-prev">Назад</li>
-        <? else: ?>
+        <?php else: ?>
             <li class="pagination-item pagination-item-prev">
                 <a href="<?=$page_link;?>page=<?=$page_number - 1;?>">
                     Назад
                 </a>
             </li>
-        <? endif; ?>
+        <?php endif; ?>
 
         <?php for ($i = 1; $i <= $pages_count; $i++) { ?>
 

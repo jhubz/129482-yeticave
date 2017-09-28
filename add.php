@@ -220,6 +220,7 @@
             'errors_messages' => $errors_messages,
 
             'lot_name' => '',
+            'selected_category' => null,
             'message' => '',
             'file_url' => null,
             'lot_rate' => null,

@@ -12,8 +12,7 @@
         [
             'page_link' => "all-lots.php?category_id=$current_category_id&",
             'pages_count' => $pages_count,
-            'page_number' => $page_number,
-            'current_category_id' => $current_category_id
+            'page_number' => $page_number
         ]
     );?>
 
