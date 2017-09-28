@@ -9,7 +9,11 @@
     } else {
         http_response_code(403);
 
-        $page_content = render_template('templates/error.php', ['error_message' => 'Неавторизованный пользователь (ошибка 403)']);
+        $page_content = render_template('templates/error.php',
+            [
+                'error_message' => 'Неавторизованный пользователь (ошибка 403)'
+            ]
+        );
 
         $layout_content = render_template('templates/layout.php',
             [

@@ -90,7 +90,7 @@
                     'categories_id' => $categories_id,
                     'current_category_id' => $category_id,
                     'user' => $user,
-                    'page_title' => 'Мои ставки'
+                    'page_title' => 'Все лоты'
                 ]
             );
 
@@ -110,7 +110,7 @@
                     'categories' => $categories,
                     'categories_id' => $categories_id,
                     'user' => $user,
-                    'page_title' => 'Мои ставки'
+                    'page_title' => 'Все лоты'
                 ]
             );
 
@@ -130,7 +130,7 @@
                 'categories' => $categories,
                 'categories_id' => $categories_id,
                 'user' => $user,
-                'page_title' => 'Мои ставки'
+                'page_title' => 'Все лоты'
             ]
         );
 

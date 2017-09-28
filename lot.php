@@ -69,7 +69,11 @@
         if (!isset($lot)) {
             http_response_code(404);
 
-            $page_content = render_template('templates/error.php', ['error_message' => 'Такой страницы не существует (ошибка 404)']);
+            $page_content = render_template('templates/error.php',
+                [
+                    'error_message' => 'Такой страницы не существует (ошибка 404)'
+                ]
+            );
 
             $layout_content = render_template('templates/layout.php',
                 [
@@ -121,7 +125,7 @@
 
                 $cost = $_POST['cost'] ?? '';
 
-                if (!(in_array('cost', $errors)) && $cost < ($lot['lot_price'] + $lot['bet_step'])) {
+                if (!(in_array('cost', $errors)) && (int)$cost < ($lot['lot_price'] + $lot['bet_step'])) {
                     $errors[] = 'cost';
                     $errors_messages['cost'] = 'Слишком низкая ставка';
                 }
@@ -151,7 +155,8 @@
                             'bets_count' => $bets_count,
                             'errors' => $errors,
                             'errors_messages' => $errors_messages,
-                            'cost' => $cost
+                            'cost' => $cost,
+                            'is_done_bet' => $is_done_bet
                         ]
                     );
 
@@ -180,6 +185,7 @@
                     'bets_count' => $bets_count,
                     'errors' => $errors,
                     'errors_messages' => $errors_messages,
+                    'cost' => null,
                     'is_done_bet' => $is_done_bet
                 ]
             );
@@ -200,7 +206,11 @@
     } else {
         http_response_code(404);
 
-        $page_content = render_template('templates/error.php', ['error_message' => 'Такой страницы не существует (ошибка 404)']);
+        $page_content = render_template('templates/error.php',
+            [
+                'error_message' => 'Такой страницы не существует (ошибка 404)'
+            ]
+        );
 
         $layout_content = render_template('templates/layout.php',
             [

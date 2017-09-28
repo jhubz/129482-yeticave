@@ -158,6 +158,7 @@
     $page_content = render_template('templates/sign-up.php',
         [
             'errors' => $errors,
+            'errors_messages' => $errors_messages,
             'name' => '',
             'email' => '',
             'message' => '',

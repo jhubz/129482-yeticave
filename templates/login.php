@@ -4,7 +4,7 @@
     <form class="form container" action="login.php" method="post">
 <?php endif; ?>
 
-    <?php if (!empty($message)): ?>
+    <?php if (isset($message)): ?>
         <p><?=$message;?></p>
     <?php endif; ?>
 
